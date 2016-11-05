@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class OrderBuffer {
     private LinkedList<Order> orders;
-    private final static int CAPACITY = 5000;
+    private final static int CAPACITY = 5;
     
     public OrderBuffer(){
         orders = new LinkedList<>();
@@ -23,7 +23,7 @@ public class OrderBuffer {
     public void fill(){
         orders = new LinkedList<>();
         for(int i = 0; i < CAPACITY; i++){
-            orders.add(new Order( BigInteger(""+i) ,""+i) );
+            orders.add(new Order( new BigInteger(""+i) ,""+i) );
         }
     }
     
@@ -35,9 +35,5 @@ public class OrderBuffer {
         if(orders.size() < CAPACITY){
             orders.add(ord);
         }
-    }
-
-    private BigInteger BigInteger(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

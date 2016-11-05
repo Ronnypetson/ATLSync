@@ -69,7 +69,7 @@ public class ATLSync {
     }
     
     private static void printStatistics(double stat[][]){
-        System.out.print("Mean, \tMin, \tMax, \tStandard_Deviation\n");
+        System.out.print("\tMean, \t\tMin, \t\tMax, \t\tStd_Dev\n");
         for(int i = 0; i < numConsumers.length; i++){
             for(int j = 0; j < 3; j++){
                 System.out.print(" \t" + stat[i][j] + ",");

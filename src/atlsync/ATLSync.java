@@ -11,7 +11,7 @@ package atlsync;
  */
 public class ATLSync {
     final static int numConsumers[] = {1, 5, 10, 50, 100, 500, 1000};
-    final static int numRepetitions = 2;
+    final static int numRepetitions = 10;
     static OrderBuffer buffer = new OrderBuffer();
     static OrderConsumer consumers[];
     
@@ -25,6 +25,9 @@ public class ATLSync {
         // 0: mean, 1: minimum, 2: maximum, 3: standard deviation
         //
         for(int i = 0; i < numConsumers.length; i++){
+            //
+            // OrderBuffer.CAPACITY = 5*numConsumers[i];
+            //
             System.out.println("\n\n\t -- " + numConsumers[i] + " consumers --\n");
             long min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
             double mean = 0.0;
@@ -54,6 +57,12 @@ public class ATLSync {
                 mean += t;
             }
             mean /= numRepetitions;
+            //
+            /* double k_ = 5000.0/OrderBuffer.CAPACITY;
+            mean *= k_;
+            min *= k_;
+            max *= k_; */
+            //
             double sd = 0.0;
             for(int j = 0; j < numRepetitions; j++){
                 sd += Math.pow(mean - times[j], 2.0);
@@ -64,6 +73,7 @@ public class ATLSync {
             statistics[i][1] = min;
             statistics[i][2] = max;
             statistics[i][3] = sd;
+            //
         }
         printStatistics(statistics);
     }

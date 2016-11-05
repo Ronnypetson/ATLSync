@@ -7,6 +7,7 @@ package atlsync;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
 /**
  *
@@ -14,7 +15,10 @@ import java.util.LinkedList;
  */
 public class OrderBuffer {
     private LinkedList<Order> orders;
-    private final static int CAPACITY = 5;
+    private final Semaphore available = new Semaphore(1, true);
+    //
+    public static int CAPACITY = 5000;
+    //
     
     public OrderBuffer(){
         orders = new LinkedList<>();

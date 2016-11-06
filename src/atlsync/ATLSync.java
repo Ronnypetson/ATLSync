@@ -16,6 +16,7 @@ public class ATLSync {
     static OrderBuffer buffer = new OrderBuffer();
     static OrderConsumer consumers[];
     static OrderProducer producers[];
+    static OrderMonitor orderMonitor;
     
     /**
      * @param args the command line arguments
@@ -24,11 +25,12 @@ public class ATLSync {
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
 // <<<<<<< OURS
+        orderMonitor = new OrderMonitor();
         // test1();
-        test2();
+        test3();
     }
     
-    private static void test2() throws InterruptedException{
+    private static void test3() throws InterruptedException{
         double statistics[][] = new double[numConsumers.length][4];
         // 0: mean, 1: minimum, 2: maximum, 3: standard deviation
         //
@@ -53,11 +55,11 @@ public class ATLSync {
 // >>>>>>> THEIRS
                 long t0 = System.currentTimeMillis();
                 for(int k = 0; k < numProducers[i]; k++){
-                    producers[k] = new OrderProducer(k, buffer);
+                    producers[k] = new OrderProducer(k, buffer, orderMonitor);
                     producers[k].start();
                 }
                 for(int k = 0; k < numConsumers[i]; k++){
-                    consumers[k] = new OrderConsumer(k, buffer);
+                    consumers[k] = new OrderConsumer(k, buffer, orderMonitor);
                     consumers[k].start();
                 }
                 //
@@ -172,7 +174,7 @@ public class ATLSync {
     private static void setConsumers(int numCons){
         consumers = new OrderConsumer[numCons];
         for(int i = 0; i < numCons; i++){
-            consumers[i] = new OrderConsumer(i, buffer);
+            consumers[i] = new OrderConsumer(i, buffer, orderMonitor);
         }
     }
 }

@@ -16,35 +16,26 @@ import java.util.logging.Logger;
  * @author ronnypetsonss
  */
 public class OrderProducer extends Thread {
-    private final static int SLEEP_DURATION = 3000;
-    private final static int PRODUCTION_LIMIT = 25;
+    public final static int SLEEP_DURATION = 3000;
+    public final static int PRODUCTION_LIMIT = 25;
     private int produced;
     private int producerId;
     private OrderBuffer buffer;
+    private OrderMonitor monitor;
     
-    public OrderProducer(int id, OrderBuffer b){
+    public OrderProducer(int id, OrderBuffer b, OrderMonitor ord){
         producerId = id;
         buffer = b;
         produced = 0;
+        monitor = ord;
     }
     
     @Override
     public void run(){
-        //
-        while(produced < PRODUCTION_LIMIT){
-            if(!buffer.isFull()){
-                Timestamp t0 = new Timestamp((new Date()).getTime());
-                String prod = "" + (super.getId()*1000 + (produced++));
-                Order ord = new Order(new BigInteger(prod), prod);
-                try {
-                    buffer.addOrder(ord);
-                    Thread.sleep(SLEEP_DURATION);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(OrderProducer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                Timestamp t1 = new Timestamp((new Date()).getTime());
-                printProcessing(t0,t1,ord);
-            }
+        try {
+            monitor.produce(buffer, producerId);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(OrderProducer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

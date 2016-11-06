@@ -22,6 +22,19 @@ public class ATLSync {
      */
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
+        consumers = new OrderConsumer[50];
+        producers = new OrderProducer[100];
+        for(int i = 0; i < 100; i++){
+            producers[i] = new OrderProducer(i, buffer);
+            producers[i].start();
+        }
+        for(int i = 0; i < 50; i++){
+            consumers[i] = new OrderConsumer(i, buffer);
+            consumers[i].start();
+        }
+    }
+    
+    private static void test1() throws InterruptedException{
         double statistics[][] = new double[numConsumers.length][4];
         // 0: mean, 1: minimum, 2: maximum, 3: standard deviation
         //

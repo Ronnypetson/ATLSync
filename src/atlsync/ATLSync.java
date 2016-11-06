@@ -44,8 +44,13 @@ public class ATLSync {
             producers = new OrderProducer[numProducers[i]];
             for(int j = 0; j < numRepetitions; j++){
                 System.out.println("- Repetition #" + (j+1) + " - \n");
+// <<<<<<< OURS
+                //buffer.fill();
+                //setConsumers(numConsumers[i]);
+// =======
                 // buffer.fill();
                 // setConsumers(numConsumers[i]);
+// >>>>>>> THEIRS
                 long t0 = System.currentTimeMillis();
                 for(int k = 0; k < numProducers[i]; k++){
                     producers[k] = new OrderProducer(k, buffer);

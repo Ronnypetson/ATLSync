@@ -10,10 +10,11 @@ package atlsync;
  * @author ronnypetsonss
  */
 public class ATLSync {
-    final static int numConsumers[] = {1, 5, 10, 50, 100, 500, 1000};
+    final static int numConsumers[] = {1, 5, 10, 50}; // , 100, 500, 1000
     final static int numRepetitions = 10;
     static OrderBuffer buffer = new OrderBuffer();
     static OrderConsumer consumers[];
+    static OrderProducer producers[];
     
     /**
      * @param args the command line arguments
@@ -34,7 +35,7 @@ public class ATLSync {
             double times[] = new double[numRepetitions];
             for(int j = 0; j < numRepetitions; j++){
                 System.out.println("- Repetition #" + (j+1) + " - \n");
-                buffer.fill();
+                // buffer.fill();
                 setConsumers(numConsumers[i]);
                 long t0 = System.currentTimeMillis();
                 for(int k = 0; k < numConsumers[i]; k++){

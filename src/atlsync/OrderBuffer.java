@@ -7,7 +7,6 @@ package atlsync;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
 
 /**
  *
@@ -15,29 +14,32 @@ import java.util.concurrent.Semaphore;
  */
 public class OrderBuffer {
     private LinkedList<Order> orders;
-    private final Semaphore available = new Semaphore(1, true);
     //
-    public static int CAPACITY = 5000;
+    public static int CAPACITY = 250;
     //
     
     public OrderBuffer(){
         orders = new LinkedList<>();
     }
     
-    public void fill(){
+    public synchronized void fill() throws InterruptedException{
         orders = new LinkedList<>();
         for(int i = 0; i < CAPACITY; i++){
             orders.add(new Order( new BigInteger(""+i) ,""+i) );
         }
     }
     
-    public Order getOrder(){
+    public synchronized Order getOrder() throws InterruptedException{
         return orders.poll();
     }
     
-    public void addOrder(Order ord){
+    public synchronized void addOrder(Order ord) throws InterruptedException{
         if(orders.size() < CAPACITY){
             orders.add(ord);
         }
+    }
+    
+    public synchronized boolean isFull(){
+        return orders.size() == CAPACITY;
     }
 }

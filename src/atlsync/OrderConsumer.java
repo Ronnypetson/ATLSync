@@ -27,15 +27,15 @@ public class OrderConsumer extends Thread {
     @Override
     public void run(){
         Order ord;
-        while((ord = buffer.getOrder()) != null){
-            try {
+        try {
+            while((ord = buffer.getOrder()) != null){
                 Timestamp t0 = new Timestamp((new Date()).getTime());
                 Thread.sleep(SLEEP_DURATION);
                 Timestamp t1 = new Timestamp((new Date()).getTime());
                 printProcessing(t0,t1,ord);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(OrderConsumer.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(OrderConsumer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

@@ -16,23 +16,29 @@ import java.util.logging.Logger;
  */
 public class OrderConsumer extends Thread {
     private final static int SLEEP_DURATION = 3000;
+    private final static int CONSUME_LIMIT = 250;
+    private int consumed;
     private int consumerId;
     private OrderBuffer buffer;
     
     public OrderConsumer(int id, OrderBuffer b){
         consumerId = id;
         buffer = b;
+        consumed = 0;
     }
     
     @Override
     public void run(){
         Order ord;
         try {
-            while((ord = buffer.getOrder()) != null){
-                Timestamp t0 = new Timestamp((new Date()).getTime());
-                Thread.sleep(SLEEP_DURATION);
-                Timestamp t1 = new Timestamp((new Date()).getTime());
-                printProcessing(t0,t1,ord);
+            while(consumed < CONSUME_LIMIT){
+                if((ord = buffer.getOrder()) != null){
+                    consumed++;
+                    Timestamp t0 = new Timestamp((new Date()).getTime());
+                    Thread.sleep(SLEEP_DURATION);
+                    Timestamp t1 = new Timestamp((new Date()).getTime());
+                    printProcessing(t0,t1,ord);
+                }
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(OrderConsumer.class.getName()).log(Level.SEVERE, null, ex);

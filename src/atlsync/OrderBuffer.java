@@ -30,7 +30,7 @@ public class OrderBuffer {
     }
     
     public synchronized Order getOrder() throws InterruptedException{
-        return orders.poll();
+        return orders.pollFirst();
     }
     
     public synchronized void addOrder(Order ord) throws InterruptedException{
@@ -41,5 +41,9 @@ public class OrderBuffer {
     
     public synchronized boolean isFull(){
         return orders.size() == CAPACITY;
+    }
+    
+    public synchronized int getSize(){
+        return orders.size();
     }
 }
